@@ -260,6 +260,11 @@ function EmpApp({ emp, pool, onLogout }) {
         ))}
       </div>
 
+      {/* Contact HR Button */}
+      <div style={{ padding: "4px 12px 8px", flexShrink: 0 }}>
+        <button onClick={() => window.location.href = `mailto:HR@egytrans.com?subject=رسالة من ${emp.name} - ${emp.empId}&body=السلام عليكم،%0D%0A%0D%0Aأود أن أتقدم بطلب أو شكوى:%0D%0A%0D%0A[اكتب تفاصيل طلبك هنا]`} style={{ width: "100%", padding: "10px", borderRadius: 10, border: "1px solid rgba(200,169,110,.3)", background: "rgba(200,169,110,.08)", color: s.gold, fontSize: 13, fontFamily: "inherit", fontWeight: 700, cursor: "pointer" }}>📧 اتصل بـ HR أو أرسل شكوى</button>
+      </div>
+
       {/* Input */}
       <div style={{ padding: "8px 12px 18px", flexShrink: 0 }}>
         {!pool.length && <div style={{ background: "rgba(200,169,110,.06)", border: "1px solid rgba(200,169,110,.15)", borderRadius: 8, padding: "6px 12px", fontSize: 11, color: s.gold, marginBottom: 7, textAlign: "center" }}>⚠️ لا توجد مستندات — يرجى من الأدمن رفع سياسات HR</div>}
