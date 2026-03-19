@@ -147,7 +147,7 @@ function Login({ emps, admin, onEmp, onAdmin }) {
       <div style={{ textAlign: "center", marginBottom: 24, position: "relative", zIndex: 1 }}>
         <img src={LOGO} alt="logo" style={{ width: 74, height: 74, background: "#fff", borderRadius: 16, padding: 8, objectFit: "contain", animation: "eg-glow 3s infinite", boxShadow: "0 4px 22px rgba(200,169,110,.3)", display: "block", margin: "0 auto 12px" }} />
         <div style={{ fontSize: 21, fontWeight: 900, background: `linear-gradient(90deg,${s.gold},#f0d898,${s.gold})`, backgroundSize: "200%", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", animation: "eg-shim 4s linear infinite" }}>Egytrans NOSCO</div>
-        <div style={{ fontSize: 12, color: "rgba(200,169,110,.5)", marginTop: 3 }}>بوابة نور للموارد البشرية</div>
+        <div style={{ fontSize: 12, color: "rgba(200,169,110,.5)", marginTop: 3 }}>خدمة الموارد البشرية</div>
       </div>
 
       {/* Toggle */}
@@ -171,10 +171,6 @@ function Login({ emps, admin, onEmp, onAdmin }) {
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <div style={{ background: "rgba(124,58,237,.08)", border: "1px solid rgba(124,58,237,.2)", borderRadius: 9, padding: "9px 12px", fontSize: 11, color: "rgba(180,160,230,.85)", lineHeight: 1.7 }}>
-              🔐 الدخول الافتراضي:<br />
-              <b>user:</b> egytrans_admin &nbsp; <b>pass:</b> EgyHR@2025
-            </div>
             <Label t="اسم المستخدم" />
             <input style={{ ...s.inp }} value={au} onChange={e => { setAu(e.target.value); setErr(""); }} onKeyDown={e => e.key === "Enter" && r3.current?.focus()} placeholder="egytrans_admin" />
             <Label t="كلمة المرور" />
@@ -285,7 +281,7 @@ function EmpApp({ emp, pool, onLogout }) {
 // ════════════════════════════════════════════════════════
 function AdminApp({ docs, emps, admin, saveDocs, saveEmps, saveAdmin, onLogout }) {
   const [tab, setTab] = useState("files");
-  const TABS = [{ id: "files", ic: "📂", l: "رفع الملفات" }, { id: "emps", ic: "👥", l: "الموظفون" }, { id: "deploy", ic: "🚀", l: "دليل النشر" }, { id: "settings", ic: "⚙️", l: "الإعدادات" }];
+  const TABS = [{ id: "files", ic: "📂", l: "رفع الملفات" }, { id: "emps", ic: "👥", l: "الموظفون" }, { id: "settings", ic: "⚙️", l: "الإعدادات" }];
 
   return (
     <div style={{ height: "100vh", display: "flex", flexDirection: "column", background: "linear-gradient(160deg,#07081a,#0e1330 55%,#07100e)", fontFamily: "'Cairo',sans-serif" }}>
@@ -315,7 +311,6 @@ function AdminApp({ docs, emps, admin, saveDocs, saveEmps, saveAdmin, onLogout }
       <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
         {tab === "files" && <FilesTab docs={docs} save={saveDocs} />}
         {tab === "emps" && <EmpsTab emps={emps} save={saveEmps} />}
-        {tab === "deploy" && <DeployTab />}
         {tab === "settings" && <SettingsTab admin={admin} save={saveAdmin} />}
       </div>
     </div>
