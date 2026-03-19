@@ -332,21 +332,30 @@ function FilesTab({ docs, save }) {
   const handleFileSelect = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    
+    const ext = file.name.split(".").pop()?.toLowerCase();
+    if (!["txt", "csv", "docx", "xlsx", "xls"].includes(ext)) {
+      alert(`❌ نوع الملف "${ext}" غير مدعوم!\n\n✅ الملفات المدعومة:\n• TXT (نصوص)\n• CSV (جداول)\n• XLSX/XLS (Excel)\n• DOCX (Word)\n\n💡 للملفات PDF: حولها إلى TXT أولاً باستخدام أداة تحويل أونلاين`);
+      e.target.value = '';
+      return;
+    }
+    
     setUploading(true);
     try {
       const reader = new FileReader();
       reader.onload = async (event) => {
         let content = event.target?.result || "";
         if (typeof content !== "string") {
-          content = new TextDecoder().decode(content);
+          content = new TextDecoder("utf-8").decode(content);
         }
-        setTx(content.substring(0, 50000));
+        const cleanContent = content.substring(0, 50000).trim();
+        setTx(cleanContent);
         setNm(file.name.split(".").slice(0, -1).join("."));
         setUploading(false);
       };
-      reader.readAsText(file);
+      reader.readAsText(file, "utf-8");
     } catch (e) {
-      alert("خطأ في قراءة الملف. تأكد أنه ملف نصي أو CSV أو Excel مُحفوظ كـ CSV");
+      alert("خطأ في قراءة الملف. جرب نسخ محتوى الملف ولصقه مباشرة");
       setUploading(false);
     }
   };
@@ -389,13 +398,13 @@ function FilesTab({ docs, save }) {
       ) : (
         <div>
           <button onClick={() => setView("list")} style={{ background: "rgba(200,169,110,.08)", border: "1px solid rgba(200,169,110,.2)", borderRadius: 9, color: s.gold, padding: "6px 13px", cursor: "pointer", fontSize: 13, marginBottom: 16 }}>← رجوع</button>
-          <Label t="اختر ملف لتحميله *" />
-          <input accept=".pdf,.xlsx,.xls,.csv,.txt,.docx,.doc" onChange={handleFileSelect} disabled={uploading} type="file" style={{ ...s.inp, marginTop: 4, marginBottom: 12, cursor: uploading ? "wait" : "pointer", opacity: uploading ? 0.5 : 1 }} />
+          <Label t="اختر ملف لتحميله (TXT, CSV, XLSX, DOCX) *" />
+          <input accept=".txt,.csv,.xlsx,.xls,.docx" onChange={handleFileSelect} disabled={uploading} type="file" style={{ ...s.inp, marginTop: 4, marginBottom: 12, cursor: uploading ? "wait" : "pointer", opacity: uploading ? 0.5 : 1 }} />
           {uploading && <div style={{ color: "#7eb8f7", fontSize: 12, marginBottom: 12 }}>⏳ جاري تحميل الملف...</div>}
           <Label t="اسم المستند *" />
           <input style={{ ...s.inp, marginTop: 4, marginBottom: 12 }} value={nm} onChange={e => setNm(e.target.value)} placeholder="مثال: لائحة الإجازات 2025" />
           <Label t="محتوى المستند (يمكن تعديله) *" />
-          <textarea value={tx} onChange={e => setTx(e.target.value)} rows={9} style={{ ...s.inp, resize: "vertical", marginTop: 5, marginBottom: 6 }} />
+          <textarea value={tx} onChange={e => setTx(e.target.value)} rows={9} dir="auto" style={{ ...s.inp, resize: "vertical", marginTop: 5, marginBottom: 6, fontFamily: "inherit" }} />
           <PurpleBtn onClick={addDoc} label="💾 حفظ المستند" full />
         </div>
       )}
