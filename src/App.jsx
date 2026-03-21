@@ -33,15 +33,30 @@ function buildSys(emp, ctx) {
   return base + "\n\n══ قاعدة المعرفة ══\n" + ctx.map((x, i) => `[${i + 1}. ${x.src}]\n${x.t}`).join("\n---\n") + "\n══════════\nأجب فقط من المعلومات أعلاه.";
 }
 async function ask(msgs, sys) {
-  const apiKey = import.meta.env.VITE_ANTHROPIC_KEY;
-  if (!apiKey) {
-    return "⚠️ API key غير مضبوط. اطلب من الأدمن الإعدادات.";
+  try {
+    const r = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        messages: msgs,
+        system: sys
+      })
+    });
+
+    if (!r.ok) {
+      const errText = await r.text();
+      console.error(`❌ API Error ${r.status}:`, errText);
+      return `⚠️ خطأ من الخادم (${r.status}). اتصل بـ HR.`;
+    }
+
+    const data = await r.json();
+    return data.content?.[0]?.text || "عذراً، لم أتمكن من الرد. اتصل بـ HR.";
+  } catch (e) {
+    console.error("❌ API Request Failed:", e.message);
+    return "⚠️ خطأ في الاتصال. اتصل بـ HR: hr.manager@egytrans.com";
   }
-  const r = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST", headers: { "Content-Type": "application/json", "x-api-key": apiKey },
-    body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 900, system: sys, messages: msgs })
-  });
-  return (await r.json()).content?.[0]?.text || "عذراً، حدث خطأ.";
 }
 const ts = () => new Date().toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" });
 
