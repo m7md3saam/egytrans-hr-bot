@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
-      console.error("❌ ANTHROPIC_API_KEY not found in server environment");
+      console.error("ANTHROPIC_API_KEY not found in server environment");
       return res.status(500).json({ error: "Server configuration error" });
     }
 
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         "anthropic-version": "2023-06-01"
       },
       body: JSON.stringify({
-        model: "claude-3-sonnet-20240229",
+        model: "claude-sonnet-4-20250514",
         max_tokens: 900,
         system,
         messages
@@ -34,15 +34,13 @@ export default async function handler(req, res) {
     const data = await r.json();
 
     if (!r.ok) {
-      console.error(`❌ Anthropic API Error ${r.status}:`, data);
-      return res.status(r.status).json({
-        error: data
-      });
+      console.error(`Anthropic API Error ${r.status}:`, data);
+      return res.status(r.status).json({ error: data });
     }
 
     return res.status(200).json(data);
   } catch (error) {
-    console.error("❌ Serverless function error:", error.message);
+    console.error("Serverless function error:", error.message);
     return res.status(500).json({
       error: error.message || "Internal server error"
     });
