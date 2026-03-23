@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import LOGO from "./logo.jpg";
 
-const LOGO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='20' fill='%230b1a2e'/%3E%3Ccircle cx='60' cy='60' r='44' fill='%23c59e5f'/%3E%3Ctext x='50%' y='58%' font-family='Cairo,Segoe UI,Arial' font-size='52' font-weight='800' fill='%230b1a2e' text-anchor='middle' dominant-baseline='middle'%3EE%3C/text%3E%3C/svg%3E";
 
 const K = { docs: "eg_docs_v5", emps: "eg_emps_v5", adm: "eg_adm_v5" };
 const DEF_ADMIN = { user: "egytrans_admin", pass: "EgyHR@2025" };
