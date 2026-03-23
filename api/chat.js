@@ -29,34 +29,31 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      console.error("GEMINI_API_KEY not found in server environment");
       return res.status(500).json({
-        error: "Gemini API key missing on server",
+        error: "GEMINI_API_KEY missing on server",
       });
     }
 
     const safeMessages = messages
       .filter((m) => m && (m.role === "user" || m.role === "assistant"))
       .map((m) => ({
-        role: m.role,
-        content:
-          typeof m.content === "string"
-            ? m.content
-            : String(m.content ?? ""),
+        role: m.role === "assistant" ? "model" : "user",
+        parts: [
+          {
+            text:
+              typeof m.content === "string"
+                ? m.content
+                : String(m.content ?? ""),
+          },
+        ],
       }))
-      .filter((m) => m.content.trim().length > 0);
+      .filter((m) => m.parts[0].text.trim().length > 0);
 
     if (safeMessages.length === 0) {
       return res.status(400).json({
         error: "No valid messages to send",
       });
     }
-
-    // تحويل history من صيغة Anthropic/OpenAI-style إلى Gemini contents[]
-    const contents = safeMessages.map((m) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: m.content }],
-    }));
 
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
@@ -70,7 +67,11 @@ export default async function handler(req, res) {
           systemInstruction: {
             parts: [{ text: system }],
           },
-          contents,
+          contents: safeMessages,
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 500,
+          },
         }),
       }
     );
@@ -78,16 +79,10 @@ export default async function handler(req, res) {
     const data = await response.json().catch(() => null);
 
     if (!response.ok) {
-      console.error("Gemini API Error:", {
-        status: response.status,
-        data,
-      });
-
       return res.status(response.status).json({
         error:
           data?.error?.message ||
-          data?.error ||
-          data ||
+          JSON.stringify(data) ||
           "Gemini request failed",
       });
     }
@@ -96,14 +91,12 @@ export default async function handler(req, res) {
       data?.candidates?.[0]?.content?.parts
         ?.map((p) => p.text || "")
         .join("")
-        .trim() || "";
+        .trim() || "عذرًا، لم أتمكن من الرد.";
 
     return res.status(200).json({
-      content: [{ text: text || "عذرًا، لم أتمكن من الرد." }],
-      raw: data,
+      content: [{ text }],
     });
   } catch (error) {
-    console.error("Serverless function error:", error);
     return res.status(500).json({
       error: error?.message || "Internal server error",
     });

@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 
 const LOGO =
-  "data:image/jpeg;base64,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";
+  "data:image/jpeg;base64,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";
 
-// ─── storage helpers ───────────────────────────────────
 const K = { docs: "eg_docs_v5", emps: "eg_emps_v5", adm: "eg_adm_v5" };
 const DEF_ADMIN = { user: "egytrans_admin", pass: "EgyHR@2025" };
 
@@ -22,7 +21,6 @@ async function sSet(k, v) {
   } catch {}
 }
 
-// ─── utils ─────────────────────────────────────────────
 function ts() {
   return new Date().toLocaleTimeString("ar-EG", {
     hour: "2-digit",
@@ -30,7 +28,7 @@ function ts() {
   });
 }
 
-function chunk(text, max = 500) {
+function chunk(text, max = 300) {
   const lines = String(text || "")
     .split(/\n+/)
     .map((l) => l.trim())
@@ -76,7 +74,7 @@ function search(q, pool, k = 5) {
 
 function buildSys(emp, ctx) {
   const refs = ctx.length
-    ? ctx.map((c, i) => `[#${i + 1}] (${c.src})\n${c.t}`).join("\n\n")
+    ? ctx.map((c, i) => `[#${i + 1}] ${c.t}`).join("\n\n")
     : "لا توجد مراجع متاحة.";
 
   return `
@@ -88,15 +86,23 @@ function buildSys(emp, ctx) {
 - الشركة: ${emp.company}
 - القسم: ${emp.department || "غير محدد"}
 
-التعليمات:
-- أجب باحترافية ووضوح وبأسلوب مختصر.
-- اعتمد فقط على المراجع المرسلة لك.
-- لو المعلومة غير موجودة بوضوح، قل:
-"لم أجد نصًا واضحًا في السياسات المرفوعة يجيب على هذا السؤال."
-- لا تؤلف معلومات غير موجودة.
-- لو أمكن، اذكر اسم المستند في آخر الرد.
+أسلوب الرد:
+- اكتب بالعربية البسيطة جدًا.
+- جاوب بشكل مباشر وواضح.
+- لا تستخدم لغة قانونية أو رسمية ثقيلة إلا لو السؤال يتطلب ذلك.
+- ابدأ بالإجابة المختصرة أولًا، ثم وضحها في سطر أو سطرين فقط.
+- استخدم أسلوب محادثة طبيعي ومهذب.
+- لا تنسخ النص حرفيًا من السياسة إلا لو ضروري.
+- لو المعلومة غير مؤكدة أو غير موجودة بوضوح، قل:
+"المعلومة دي مش واضحة عندي في السياسات المرفوعة."
+- لا تذكر اسم المستند أو اسم السياسة داخل الرد.
+- لا تكتب مراجع أو عناوين أو أقواس في آخر الرسالة.
+- لو السؤال عن إجراء، اشرح الخطوات ببساطة.
+- لو السؤال بنعم أو لا، ابدأ بـ: "نعم" أو "لا" أو "غالبًا".
+- لو السؤال يحتاج تنبيه بسيط، اجعله في جملة قصيرة.
+- لا تطيل.
 
-المراجع:
+المحتوى المتاح:
 ${refs}
 `.trim();
 }
@@ -130,9 +136,10 @@ async function ask(msgs, sys) {
     if (!r.ok) {
       console.error(`API Error ${r.status}:`, data);
 
-      const serverError =
+      let serverError =
         data?.error?.message ||
         data?.error ||
+        JSON.stringify(data) ||
         `خطأ من الخادم (${r.status})`;
 
       return `⚠️ ${serverError}`;
@@ -145,7 +152,6 @@ async function ask(msgs, sys) {
   }
 }
 
-// ─── styles ────────────────────────────────────────────
 const s = {
   gold: "#C8A96E",
   teal: "#27916a",
@@ -208,9 +214,6 @@ const globalCSS = `
   textarea:focus, input:focus { outline: none; border-color: rgba(200,169,110,.6) !important }
 `;
 
-// ════════════════════════════════════════════════════════
-// ROOT
-// ════════════════════════════════════════════════════════
 export default function App() {
   const [screen, setScreen] = useState("boot");
   const [emp, setEmp] = useState(null);
@@ -299,9 +302,6 @@ export default function App() {
   );
 }
 
-// ════════════════════════════════════════════════════════
-// LOGIN
-// ════════════════════════════════════════════════════════
 function Login({ emps, admin, onEmp, onAdmin }) {
   const [mode, setMode] = useState("emp");
   const [id, setId] = useState("");
@@ -571,9 +571,6 @@ function Login({ emps, admin, onEmp, onAdmin }) {
   );
 }
 
-// ════════════════════════════════════════════════════════
-// EMPLOYEE APP
-// ════════════════════════════════════════════════════════
 function EmpApp({ emp, pool, onLogout }) {
   const [msgs, setMsgs] = useState([
     {
@@ -613,7 +610,7 @@ function EmpApp({ emp, pool, onLogout }) {
           role: "assistant",
           time: ts(),
           text: reply,
-          refs: reply.startsWith("⚠️") ? [] : ctx.map((c) => c.src),
+          refs: [],
         },
       ]);
 
@@ -630,6 +627,7 @@ function EmpApp({ emp, pool, onLogout }) {
           role: "assistant",
           time: ts(),
           text: "⚠️ خطأ في الاتصال. تواصل مع HR.",
+          refs: [],
         },
       ]);
     } finally {
@@ -822,18 +820,6 @@ function EmpApp({ emp, pool, onLogout }) {
                 >
                   {m.text}
                 </div>
-
-                {m.refs?.length > 0 && (
-                  <div
-                    style={{
-                      fontSize: 10,
-                      color: "rgba(42,157,111,.5)",
-                      marginTop: 3,
-                    }}
-                  >
-                    📎 {[...new Set(m.refs)].join(" · ")}
-                  </div>
-                )}
               </div>
             </div>
           );
@@ -1034,9 +1020,6 @@ function EmpApp({ emp, pool, onLogout }) {
   );
 }
 
-// ════════════════════════════════════════════════════════
-// ADMIN APP
-// ════════════════════════════════════════════════════════
 function AdminApp({
   docs,
   emps,
@@ -1198,9 +1181,6 @@ function AdminApp({
   );
 }
 
-// ════════════════════════════════════════════════════════
-// FILES TAB
-// ════════════════════════════════════════════════════════
 function FilesTab({ docs, save }) {
   const [view, setView] = useState("list");
   const [nm, setNm] = useState("");
@@ -1448,9 +1428,6 @@ function FilesTab({ docs, save }) {
   );
 }
 
-// ════════════════════════════════════════════════════════
-// EMPLOYEES TAB
-// ════════════════════════════════════════════════════════
 function EmpsTab({ emps, save }) {
   const [view, setView] = useState("list");
   const [f, setF] = useState({
@@ -1607,9 +1584,6 @@ function EmpsTab({ emps, save }) {
   );
 }
 
-// ════════════════════════════════════════════════════════
-// DEPLOY TAB
-// ════════════════════════════════════════════════════════
 function DeployTab() {
   return (
     <div
@@ -1654,7 +1628,7 @@ function DeployTab() {
               borderRadius: 6,
             }}
           >
-            ANTHROPIC_API_KEY
+            GEMINI_API_KEY
           </code>
           <br />
           6. اضغط Deploy
@@ -1667,9 +1641,6 @@ function DeployTab() {
   );
 }
 
-// ════════════════════════════════════════════════════════
-// SETTINGS TAB
-// ════════════════════════════════════════════════════════
 function SettingsTab({ admin, save }) {
   const [u, setU] = useState(admin.user);
   const [p, setP] = useState("");
@@ -1705,7 +1676,6 @@ function SettingsTab({ admin, save }) {
   );
 }
 
-// ── shared atoms ────────────────────────────────────────
 function Label({ t }) {
   return (
     <label
