@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import LOGO from "./logo.jpg";
 
 const LOGO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='20' fill='%230b1a2e'/%3E%3Ccircle cx='60' cy='60' r='44' fill='%23c59e5f'/%3E%3Ctext x='50%' y='58%' font-family='Cairo,Segoe UI,Arial' font-size='52' font-weight='800' fill='%230b1a2e' text-anchor='middle' dominant-baseline='middle'%3EE%3C/text%3E%3C/svg%3E";
 
@@ -384,50 +385,47 @@ function Login({ emps, admin, onEmp, onAdmin }) {
         }}
       />
 
-      <div
-        style={{
-          textAlign: "center",
-          marginBottom: 24,
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        <img
-          src={LOGO}
-          alt="logo"
-          onError={(e) => {
-            if (e.currentTarget.src !== LOGO) e.currentTarget.src = LOGO;
-          }}
-          style={{
-            width: 74,
-            height: 74,
-            background: "#fff",
-            borderRadius: 16,
-            padding: 8,
-            objectFit: "contain",
-            animation: "eg-glow 3s infinite",
-            boxShadow: "0 4px 22px rgba(200,169,110,.3)",
-            display: "block",
-            margin: "0 auto 12px",
-          }}
-        />
-        <div
-          style={{
-            fontSize: 21,
-            fontWeight: 900,
-            background: `linear-gradient(90deg,${s.gold},#f0d898,${s.gold})`,
-            backgroundSize: "200%",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            animation: "eg-shim 4s linear infinite",
-          }}
-        >
-          Egytrans NOSCO
-        </div>
-        <div style={{ fontSize: 12, color: "rgba(200,169,110,.5)", marginTop: 3 }}>
-          خدمة الموارد البشرية
-        </div>
-      </div>
+     <div style={{
+  textAlign: "center",
+  marginBottom: "25px"
+}}>
+
+  <div style={{
+    display: "inline-block",
+    background: "#ffffff",
+    padding: "8px",
+    borderRadius: "20px",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.2)"
+  }}>
+    <img
+      src={LOGO}
+      alt="logo"
+      style={{
+        width: "80px",
+        height: "80px",
+        objectFit: "cover",
+        borderRadius: "14px"
+      }}
+    />
+  </div>
+
+  <h1 style={{
+    color: "#d4af37",
+    marginTop: "15px",
+    marginBottom: "5px",
+    fontWeight: "700"
+  }}>
+    Egytrans NOSCO
+  </h1>
+
+  <p style={{
+    opacity: 0.7,
+    fontSize: "14px"
+  }}>
+    خدمة الموارد البشرية
+  </p>
+
+</div>
 
       <div
         style={{
